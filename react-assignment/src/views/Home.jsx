@@ -1,36 +1,11 @@
-import {useState, useEffect} from 'react';
+import {useState} from 'react';
 import MediaRow from '../components/MediaRow';
 import SingleView from '../components/SingleView';
-import fetchData from '../utils/fetchData';
+import useMedia from '../hooks/useMedia';
 
 const Home = () => {
-  const [mediaArray, setMediaArray] = useState([]);
   const [selectedItem, setSelectedItem] = useState(null);
-
-  const getMedia = async () => {
-    try {
-      const json = await fetchData(import.meta.env.VITE_MEDIA_API + '/media');
-
-      const mediaWithUsernames = await Promise.all(
-        json.map(async (item) => {
-          const userResult = await fetchData(
-            import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
-          );
-          return {...item, username: userResult.username};
-        }),
-      );
-
-      setMediaArray(mediaWithUsernames);
-    } catch (error) {
-      console.error('Error fetching media:', error);
-    }
-  };
-
-  useEffect(() => {
-    getMedia();
-  }, []);
-
-  console.log(mediaArray);
+  const {mediaArray} = useMedia();
 
   return (
     <>
