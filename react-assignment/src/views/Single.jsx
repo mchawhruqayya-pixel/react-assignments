@@ -8,6 +8,7 @@ const Single = () => {
   return (
     <div>
       <h3>{item.title}</h3>
+      <p>By: {item.username}</p>
       <p>{item.description}</p>
       {item.media_type.startsWith('video') ? (
         <video src={item.filename} controls width="400" />

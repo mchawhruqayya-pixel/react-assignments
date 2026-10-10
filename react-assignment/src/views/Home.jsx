@@ -9,8 +9,18 @@ const Home = () => {
 
   const getMedia = async () => {
     try {
-      const json = await fetchData('/test.json');
-      setMediaArray(json);
+      const json = await fetchData(import.meta.env.VITE_MEDIA_API + '/media');
+
+      const mediaWithUsernames = await Promise.all(
+        json.map(async (item) => {
+          const userResult = await fetchData(
+            import.meta.env.VITE_AUTH_API + '/users/' + item.user_id,
+          );
+          return {...item, username: userResult.username};
+        }),
+      );
+
+      setMediaArray(mediaWithUsernames);
     } catch (error) {
       console.error('Error fetching media:', error);
     }
@@ -32,6 +42,7 @@ const Home = () => {
             <th>Thumbnail</th>
             <th>Title</th>
             <th>Description</th>
+            <th>Owner</th>
             <th>Created</th>
             <th>Size</th>
             <th>Type</th>
