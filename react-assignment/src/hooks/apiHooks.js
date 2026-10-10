@@ -52,4 +52,25 @@ const useUser = () => {
   return {postUser, getUserByToken};
 };
 
-export {useAuthentication, useUser};
+const useFile = () => {
+  const postFile = async (file, token) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+      },
+      body: formData,
+    };
+    const fileResult = await fetchData(
+      import.meta.env.VITE_UPLOAD_SERVER + '/upload',
+      fetchOptions,
+    );
+    return fileResult;
+  };
+
+  return {postFile};
+};
+
+export {useAuthentication, useUser, useFile};

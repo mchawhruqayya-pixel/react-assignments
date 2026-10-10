@@ -27,7 +27,30 @@ const useMedia = () => {
     getMedia();
   }, []);
 
-  return {mediaArray};
+  const postMedia = async (file, inputs, token) => {
+    const mediaData = {
+      title: inputs.title,
+      description: inputs.description,
+      filename: file.filename,
+      filesize: file.filesize,
+      media_type: file.media_type,
+    };
+    const fetchOptions = {
+      method: 'POST',
+      headers: {
+        Authorization: 'Bearer ' + token,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(mediaData),
+    };
+    const mediaResult = await fetchData(
+      import.meta.env.VITE_MEDIA_API + '/media',
+      fetchOptions,
+    );
+    return mediaResult;
+  };
+
+  return {mediaArray, postMedia};
 };
 
 export default useMedia;
